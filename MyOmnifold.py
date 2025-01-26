@@ -81,7 +81,7 @@ def omnifold(theta0,theta_unknown_S,iterations,model,verbose=0):
 
         detector_level_weights = detector_level_weights * reweight(theta0_S,model)
         weights_pull = detector_level_weights
-        weights[i, :1, :] = weights_pull
+        weights[i, 0, :] = weights_pull
 
         # STEP 2: classify Gen. to reweighted Gen. (which is reweighted by weights_pull)
         # weights Gen. --> reweighted Gen.
@@ -90,7 +90,7 @@ def omnifold(theta0,theta_unknown_S,iterations,model,verbose=0):
             print("\nSTEP 2\n")
             pass
 
-        weights_2 = np.concatenate((np.ones(len(theta0_G)), weights_pull))
+        weights_2 = np.concatenate((particle_level_weights, weights_pull))
         # ones for Gen. (not MC weights), actual weights for (reweighted) Gen.
 
         X_train_2, X_test_2, Y_train_2, Y_test_2, w_train_2, w_test_2 = train_test_split(xvals_2, yvals_2, weights_2)
@@ -111,7 +111,7 @@ def omnifold(theta0,theta_unknown_S,iterations,model,verbose=0):
 
 
         particle_level_weights = particle_level_weights*reweight(theta0_G,model)
-        weights[i, 1:2, :] = particle_level_weights
+        weights[i, 1, :] = particle_level_weights
         detector_level_weights = particle_level_weights #pushing
         pass
 
